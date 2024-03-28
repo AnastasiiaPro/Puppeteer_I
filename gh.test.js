@@ -2,14 +2,17 @@ let page;
 
 beforeEach(async () => {
   page = await browser.newPage();
-  await page.goto("https://github.com/team");
-}, 20000);
+}, 10000);
 
 afterEach(() => {
   page.close();
 });
 
-describe("Github page tests", () => {
+describe("Github team page tests", () => {
+  beforeEach(async () => {
+  await page.goto("https://github.com/team");
+}, 20000);
+
   test("The h1 header content'", async () => {
     const firstLink = await page.$("header div div a");
     await firstLink.click();
@@ -31,4 +34,27 @@ describe("Github page tests", () => {
     const actual = await page.$eval(btnSelector, link => link.textContent);
     expect(actual).toMatch("Get started with Team")
   }, 10000);  
+});
+  
+describe("Github titles page tests", () => {
+   test("The h1 header content on page enterprise", async () => {
+    await page.goto("https://github.com/enterprise");
+    await page.waitForSelector("h1");
+    const title = await page.title();
+    expect(title).toEqual("The AI Powered Developer Platform. · GitHub");
+  }, 15000);
+
+  test("The h1 header content on page startups", async () => {
+    await page.goto("https://github.com/enterprise/startups",);
+    await page.waitForSelector("h1");
+    const title = await page.title();
+    expect(title).toEqual("GitHub for Startups: Build your startup on GitHub · GitHub");
+  }, 15000);
+
+  test("The h1 header content on page education", async () => {
+    await page.goto("https://education.github.com",);
+    await page.waitForSelector("h1");
+    const title = await page.title();
+    expect(title).toEqual("Engaged students are the result of using real-world tools - GitHub Education");
+  }, 15000);
 });
